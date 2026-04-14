@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://player01"]
+
+[ext_resource type="Script" path="res://src/player.gd" id="1_player"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player.png" id="2_player_tex"]
+[ext_resource type="AudioStream" path="res://assets/sounds/shoot.wav" id="3_shoot_sound"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_16x16"]
+size = Vector2(16, 16)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 1
+collision_mask = 14
+script = ExtResource("1_player")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_player_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_16x16")
+
+[node name="ShootSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_shoot_sound")
+volume_db = -5.0

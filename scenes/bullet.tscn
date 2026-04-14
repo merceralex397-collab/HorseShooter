@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://bullet01"]
+
+[ext_resource type="Script" path="res://src/bullet.gd" id="1_bullet"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bullet.png" id="2_bullet_tex"]
+[ext_resource type="AudioStream" path="res://assets/sounds/hit.wav" id="3_hit_sound"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8x4"]
+size = Vector2(8, 4)
+
+[node name="Bullet" type="Area2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_bullet")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_bullet_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_8x4")
+
+[node name="HitSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_hit_sound")
+volume_db = -3.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-8, -4, 16, 8)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="queue_free"]

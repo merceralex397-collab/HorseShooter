@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://explosion01"]
+
+[ext_resource type="Script" path="res://src/explosion.gd" id="1_explosion"]
+[ext_resource type="Texture2D" path="res://assets/sprites/explosion_0.png" id="2_explosion_tex"]
+[ext_resource type="AudioStream" path="res://assets/sounds/explosion.wav" id="3_sound"]
+
+[node name="Explosion" type="Node2D"]
+script = ExtResource("1_explosion")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_explosion_tex")
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_sound")
