@@ -1,95 +1,110 @@
-# HorseShooter 🐴💥
+# HorseShooter: Equine Hate Saga
 
-A slapstick comedy 2D Android game where you run around shooting cartoon horses with googly eyes. Built with Godot 4.3!
+HorseShooter is being rebuilt from the current arcade prototype into a mobile-first open-world action RPG for Android, built in Godot 4.6.
 
-![Game Icon](assets/sprites/icon.png)
+The current project state is treated as a concept prototype: useful for proving touch movement, aiming, shooting, Android export wiring, and horse-combat tone. The target game is much larger: a continuous world with towns, villages, cities, wilderness regions, story quests, followers, boss horses, settlement founding, settlement management, deep character growth, and a large data-driven equipment system.
 
-## 🎮 Gameplay
+## Creative Pillars
 
-- **Move**: WASD or Arrow keys (on mobile: touch joystick)
-- **Shoot**: Click or Spacebar
-- **Objective**: Score points by hitting cartoon horses
+- Open-world RPG first: exploration, quests, factions, settlements, companions, crafting, bosses, and player choice.
+- Horse shooting remains central: horses are enemies, bosses, regional hazards, quest targets, settlement threats, and comedy fuel.
+- The player character has a fixed identity but a player-chosen name: a woman with long dark brown hair who constantly talks about how much she hates horses while swearing.
+- Android is the release platform: every system must be touch-first, readable on phones, performant, and exportable to APK/AAB.
+- Graphics are being rebuilt from scratch: the new visual target is high-detail stylized 2D/2.5D with layered environments, lighting, shaders, animated characters, weather, and biome-specific atmosphere.
 
-### Slapstick Comedy Style
+## Target Game
 
-The game features cartoonish, non-violent comedy:
-- 🐴 Horses with exaggerated googly eyes
-- 💨 Smoke puff explosions with starbursts
-- 👻 Death animation: horses spin, shrink, and float up like cartoon ghosts
-- 💬 Comic text effects: "KA-BOOM!", "POW!", "SPLAT!", "WHAM!", "ZAP!"
-- 🔊 Funny sound effects: boings, splats, and pew-pew lasers
+Working title: `HorseShooter: Equine Hate Saga`
 
-## 🏆 Features
+Player character: a player-named, foul-mouthed horse-hating gunslinger with long dark brown hair, a battered coat, and a pathological refusal to let any horse-related problem remain unsolved.
 
-- 4 different horse colors (brown, white, gray, black)
-- Score tracking with high score persistence
-- Retro pixel art style
-- 8-bit style sound effects
-- Android touch controls
-- Procedurally generated assets
+Core loop:
 
-## 🛠️ Built With
+1. Explore a large continuous world.
+2. Discover settlements, roads, ruins, wilderness encounters, horse territories, and faction conflicts.
+3. Talk to NPCs, accept quests, recruit followers, and make settlement decisions.
+4. Fight horse packs, mounted gangs, cursed steeds, mechanical cavalry, and boss horses.
+5. Loot weapons, equipment, abilities, materials, maps, and settlement resources.
+6. Upgrade the player character, followers, gear, and founded settlements.
+7. Expand a camp into a village, town, and eventually a city with defenses, workshops, trade, and story consequences.
 
-- **Engine**: Godot 4.3
-- **Language**: GDScript
-- **Graphics**: Python/PIL (procedurally generated sprites)
-- **Audio**: Python/wave (procedurally generated SFX)
-- **Platform**: Android (ARM64)
+## Documentation
 
-## 📁 Project Structure
+Start here:
 
-```
-HorseShooter/
-├── assets/
-│   ├── sprites/      # Pixel art sprites (PNG)
-│   └── sounds/       # Sound effects (WAV)
-├── scenes/           # Godot scene files (.tscn)
-├── src/              # GDScript source files
-├── android/          # Android build template
-├── generate_sprites.py   # Sprite generation script
-├── generate_sounds.py    # Sound generation script
-└── project.godot    # Godot project file
-```
+- [Documentation Index](docs/INDEX.md)
+- [Master Plan](docs/product/MASTER_PLAN.md)
+- [World and Story Bible](docs/product/WORLD_STORY_BIBLE.md)
+- [Systems Design](docs/product/SYSTEMS_DESIGN.md)
+- [Art Direction and Asset Pipeline](docs/product/ART_DIRECTION.md)
+- [Realistic Graphics Revamp](docs/product/REALISTIC_GRAPHICS_REVAMP.md)
+- [Expansion and Enhancement Plan](docs/product/EXPANSION_AND_ENHANCEMENT_PLAN.md)
+- [Image Generation Prompt Pack](docs/product/IMAGEGEN_PROMPT_PACK.md)
+- [Android Release Validation](docs/product/ANDROID_RELEASE_VALIDATION.md)
+- [Implementation TODO](docs/v2_revamp_todo.md)
+- [Open World RPG Implementation Plan](docs/superpowers/plans/2026-05-01-horseshooter-open-world-rpg.md)
 
-## 🚀 Building
+## Current Prototype
 
-### Prerequisites
-- Godot 4.3+
-- Android SDK
-- OpenJDK 17
+The current Godot project contains:
 
-### Build for Android
-```bash
-# Export from Godot editor or CLI
-godot --headless --export-release "Android" export/HorseShooter.apk
-```
+- A 2D wave-shooter scene in `scenes/main.tscn`.
+- Touch movement and aim controls in `src/hud_manager.gd`.
+- Shooting, bullets, horses, powerups, scoring, waves, audio, and VFX.
+- Android export template files under `android/`.
+- Smoke-test scenes under `tools/`.
 
-### Generate Assets
-```bash
-# Generate sprites
-python3 generate_sprites.py
+Known prototype issues relative to the new direction:
 
-# Generate sounds
-python3 generate_sounds.py
-```
+- The main menu is effectively skipped because `src/main.gd` starts the game immediately.
+- The existing game is level/wave based, not open world.
+- The escape/miss pressure loop belongs to the arcade prototype and will be replaced by world-state consequences.
+- Art assets are placeholder/generated sprites and must not define the final look.
 
-## 📱 Installation
+## Build Requirements
 
-Download the APK from releases and install on Android:
-```bash
-adb install export/HorseShooter.apk
+- Godot 4.6.1 stable.
+- Android SDK configured for Godot export.
+- OpenJDK compatible with the Android Gradle plugin used by the Godot Android template.
+- Release keystore for signed release APK/AAB builds.
+
+Godot path used on this machine:
+
+```powershell
+C:\Users\rowan\Downloads\Godot_v4.6.1-stable_win64.exe\Godot_v4.6.1-stable_win64_console.exe
 ```
 
-## 📝 License
+Headless parse check:
 
-This project is open source. Feel free to modify and distribute!
+```powershell
+& 'C:\Users\rowan\Downloads\Godot_v4.6.1-stable_win64.exe\Godot_v4.6.1-stable_win64_console.exe' --headless --path . --quit
+```
 
-## 🎯 Scoring
+Android export target:
 
-- Each horse: **100 points**
-- High score is saved automatically
-- Accuracy tracking (horses hit / horses spawned)
+```powershell
+New-Item -ItemType Directory -Force export
+& 'C:\Users\rowan\Downloads\Godot_v4.6.1-stable_win64.exe\Godot_v4.6.1-stable_win64_console.exe' --headless --path . --export-release Android export/HorseShooter.apk
+```
 
----
+## Repository Layout
 
-**Made with ❤️ using free, open-source tools!**
+```text
+assets/       Prototype sprites and sounds. Final assets will be rebuilt.
+android/      Godot Android build template.
+docs/         Product, design, implementation, and validation plans.
+scenes/       Godot scenes.
+src/          GDScript gameplay systems.
+tools/        Headless smoke-test scenes.
+```
+
+## Release Definition
+
+Release ready means:
+
+- Runs reliably on Android phones.
+- Exports a signed release APK/AAB.
+- Has a working menu, save/load, settings, touch controls, readable UI, and offline play.
+- Contains the open-world RPG vertical content promised by the final release scope.
+- Includes authored graphics, audio, quests, followers, settlements, bosses, and progression data.
+- Passes the validation matrix in [Android Release Validation](docs/product/ANDROID_RELEASE_VALIDATION.md).

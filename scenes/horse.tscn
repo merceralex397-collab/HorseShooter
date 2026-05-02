@@ -1,9 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://horse01"]
+[gd_scene load_steps=4 format=3 uid="uid://horse01"]
 
 [ext_resource type="Script" path="res://src/horse.gd" id="1_horse"]
 [ext_resource type="Texture2D" path="res://assets/sprites/horse_0.png" id="2_horse_tex"]
-[ext_resource type="AudioStream" path="res://assets/sounds/explosion.wav" id="3_explosion"]
-[ext_resource type="AudioStream" path="res://assets/sounds/boing.wav" id="4_boing"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_horse"]
 size = Vector2(40, 24)
@@ -19,11 +17,3 @@ texture = ExtResource("2_horse_tex")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_horse")
-
-[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_explosion")
-volume_db = -2.0
-
-[node name="BoingSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_boing")
-volume_db = -8.0

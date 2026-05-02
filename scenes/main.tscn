@@ -1,61 +1,320 @@
-[gd_scene load_steps=8 format=3 uid="uid://main01"]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://src/horse_spawner.gd" id="1_spawner"]
-[ext_resource type="PackedScene" uid="uid://player01" path="res://scenes/player.tscn" id="2_player"]
-[ext_resource type="Texture2D" path="res://assets/sprites/grass.png" id="3_grass"]
+[ext_resource type="Script" path="res://src/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://src/wave_manager.gd" id="2_wave"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_player"]
+[ext_resource type="Texture2D" path="res://assets/sprites/grass.png" id="4_grass"]
+[ext_resource type="Script" path="res://src/hud_manager.gd" id="5_hud"]
 
-[ext_resource type="Script" path="res://src/ui_controller.gd" id="4_ui"]
+[node name="Main" type="Node2D" groups=[]]
+script = ExtResource("1_main")
 
-[node name="Main" type="Node2D"]
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+enabled = true
 
-[node name="Background" type="Node2D" parent="."]
+[node name="Parallax" type="Node2D" parent="."]
 
-[node name="TextureRect" type="TextureRect" parent="Background"]
+[node name="FarLayer" type="Node2D" parent="Parallax"]
+
+[node name="Far" type="TextureRect" parent="Parallax/FarLayer"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 1296.0
+offset_bottom = 736.0
+texture = ExtResource("4_grass")
+stretch_mode = 1
+modulate = Color(0.9, 1.0, 0.9, 1)
+
+[node name="MidLayer" type="Node2D" parent="Parallax"]
+position = Vector2(8, 8)
+
+[node name="Mid" type="TextureRect" parent="Parallax/MidLayer"]
+offset_left = -32.0
+offset_top = -16.0
+offset_right = 1312.0
+offset_bottom = 752.0
+texture = ExtResource("4_grass")
+stretch_mode = 1
+modulate = Color(1, 0.96, 0.94, 0.75)
+
+[node name="NearLayer" type="Node2D" parent="Parallax"]
+position = Vector2(-4, -2)
+
+[node name="Near" type="TextureRect" parent="Parallax/NearLayer"]
+offset_left = -64.0
+offset_top = -16.0
+offset_right = 1344.0
+offset_bottom = 736.0
+texture = ExtResource("4_grass")
+stretch_mode = 1
+modulate = Color(1, 1, 1, 0.55)
+
+[node name="WaveManager" type="Node2D" parent="."]
+script = ExtResource("2_wave")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+
+[node name="VFX" type="Node2D" parent="."]
+
+[node name="HudLayer" type="CanvasLayer" parent="."]
+script = ExtResource("5_hud")
+
+[node name="Root" type="Control" parent="HudLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 1280.0
-offset_bottom = 720.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_grass")
-stretch_mode = 1  # Tile mode
+offset_right = 0.0
+offset_bottom = 0.0
 
-[node name="HorseSpawner" type="Node2D" parent="."]
-script = ExtResource("1_spawner")
+[node name="ScorePanel" type="VBoxContainer" parent="HudLayer/Root"]
+offset_left = 12.0
+offset_top = 10.0
+offset_right = 360.0
+offset_bottom = 178.0
+theme_override_constants/separation = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
-
-[node name="UI" type="CanvasLayer" parent="."]
-script = ExtResource("4_ui")
-
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 80.0
-grow_horizontal = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
-layout_mode = 2
-
-[node name="ScoreLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
+[node name="Score" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 28
 text = "Score: 0"
-horizontal_alignment = 1
 
-[node name="HighScoreLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "High Score: 0"
-horizontal_alignment = 1
+[node name="HighScore" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 18
+text = "Best: 0"
 
-[node name="Instructions" type="Label" parent="UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="Round" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 14
+text = "Round 0 / 0"
+
+[node name="Lives" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 14
+text = "Lives: 3"
+
+[node name="Combo" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 14
+text = "Combo: x0"
+
+[node name="Misses" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 14
+text = "Misses: 0 (0 left)"
+
+[node name="Timer" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 14
+text = "Wave: 0"
+
+[node name="Reload" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 12
+text = "Ready"
+
+[node name="State" type="Label" parent="HudLayer/Root/ScorePanel"]
+theme_override_font_sizes/font_size = 12
+text = "State: Menu"
+
+[node name="DebugPanel" type="VBoxContainer" parent="HudLayer/Root"]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -110.0
+offset_right = -8.0
+offset_bottom = -8.0
+alignment = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="Fps" type="Label" parent="HudLayer/Root/DebugPanel"]
+theme_override_font_sizes/font_size = 13
+text = "FPS: --"
+
+[node name="Accuracy" type="Label" parent="HudLayer/Root/DebugPanel"]
+theme_override_font_sizes/font_size = 13
+text = "Acc: 0%"
+
+[node name="Hint" type="Label" parent="HudLayer/Root"]
+anchor_left = 0.18
+anchor_top = 1.0
+anchor_right = 0.82
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -44.0
+offset_right = 0.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+autowrap_mode = 3
+text = ""
+visible = false
+
+[node name="Actions" type="HBoxContainer" parent="HudLayer/Root"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -420.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 58.0
+alignment = 2
+theme_override_constants/separation = 8
+
+[node name="Pause" type="Button" parent="HudLayer/Root/Actions"]
+custom_minimum_size = Vector2(86, 42)
+text = "Pause"
+flat = false
+
+[node name="Restart" type="Button" parent="HudLayer/Root/Actions"]
+custom_minimum_size = Vector2(104, 42)
+text = "Restart"
+
+[node name="AutoFire" type="CheckBox" parent="HudLayer/Root/Actions"]
+custom_minimum_size = Vector2(92, 42)
+text = "Auto"
+
+[node name="Settings" type="Button" parent="HudLayer/Root/Actions"]
+custom_minimum_size = Vector2(86, 42)
+text = "Audio"
+flat = false
+
+[node name="SettingsPanel" type="PanelContainer" parent="HudLayer/Root"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -304.0
+offset_top = 68.0
+offset_right = -16.0
+offset_bottom = 224.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HudLayer/Root/SettingsPanel"]
+theme_override_constants/separation = 10
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SettingsTitle" type="Label" parent="HudLayer/Root/SettingsPanel/VBoxContainer"]
+text = "Audio Settings"
 theme_override_font_sizes/font_size = 16
-text = "WASD/Arrows to move | Click/Space to shoot"
-horizontal_alignment = 1
+
+[node name="MasterRow" type="HBoxContainer" parent="HudLayer/Root/SettingsPanel/VBoxContainer"]
+theme_override_constants/separation = 8
+
+[node name="MasterLabel" type="Label" parent="HudLayer/Root/SettingsPanel/VBoxContainer/MasterRow"]
+text = "Master"
+custom_minimum_size = Vector2(70, 0)
+
+[node name="MasterSlider" type="HSlider" parent="HudLayer/Root/SettingsPanel/VBoxContainer/MasterRow"]
+custom_minimum_size = Vector2(150, 0)
+min_value = 0.0
+max_value = 1.0
+step = 0.02
+value = 1.0
+
+[node name="MasterValue" type="Label" parent="HudLayer/Root/SettingsPanel/VBoxContainer/MasterRow"]
+text = "100%"
+
+[node name="MusicRow" type="HBoxContainer" parent="HudLayer/Root/SettingsPanel/VBoxContainer"]
+theme_override_constants/separation = 8
+
+[node name="MusicLabel" type="Label" parent="HudLayer/Root/SettingsPanel/VBoxContainer/MusicRow"]
+text = "Music"
+custom_minimum_size = Vector2(70, 0)
+
+[node name="MusicSlider" type="HSlider" parent="HudLayer/Root/SettingsPanel/VBoxContainer/MusicRow"]
+custom_minimum_size = Vector2(150, 0)
+min_value = 0.0
+max_value = 1.0
+step = 0.02
+value = 1.0
+
+[node name="MusicValue" type="Label" parent="HudLayer/Root/SettingsPanel/VBoxContainer/MusicRow"]
+text = "100%"
+
+[node name="SFXRow" type="HBoxContainer" parent="HudLayer/Root/SettingsPanel/VBoxContainer"]
+theme_override_constants/separation = 8
+
+[node name="SFXLabel" type="Label" parent="HudLayer/Root/SettingsPanel/VBoxContainer/SFXRow"]
+text = "SFX"
+custom_minimum_size = Vector2(70, 0)
+
+[node name="SFXSlider" type="HSlider" parent="HudLayer/Root/SettingsPanel/VBoxContainer/SFXRow"]
+custom_minimum_size = Vector2(150, 0)
+min_value = 0.0
+max_value = 1.0
+step = 0.02
+value = 1.0
+
+[node name="SFXValue" type="Label" parent="HudLayer/Root/SettingsPanel/VBoxContainer/SFXRow"]
+text = "100%"
+
+[node name="CloseSettings" type="Button" parent="HudLayer/Root/SettingsPanel/VBoxContainer"]
+text = "Close"
+
+[node name="TouchControls" type="Control" parent="HudLayer/Root"]
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -260.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="MoveBase" type="Control" parent="HudLayer/Root/TouchControls"]
+anchors_preset = 6
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -184.0
+offset_right = 200.0
+offset_bottom = -8.0
+mouse_filter = 1
+
+[node name="MoveBase" type="ColorRect" parent="HudLayer/Root/TouchControls/MoveBase"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 176.0
+offset_bottom = 176.0
+color = Color(1, 1, 1, 0.12)
+mouse_filter = 1
+
+[node name="MoveKnob" type="ColorRect" parent="HudLayer/Root/TouchControls/MoveBase"]
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 104.0
+offset_bottom = 104.0
+color = Color(1, 1, 1, 0.34)
+mouse_filter = 1
+
+[node name="AimBase" type="Control" parent="HudLayer/Root/TouchControls"]
+anchors_preset = 8
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_right = -16.0
+offset_top = -184.0
+offset_bottom = -8.0
+mouse_filter = 1
+
+[node name="AimBase" type="ColorRect" parent="HudLayer/Root/TouchControls/AimBase"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 176.0
+offset_bottom = 176.0
+color = Color(1, 1, 1, 0.12)
+mouse_filter = 1
+
+[node name="AimKnob" type="ColorRect" parent="HudLayer/Root/TouchControls/AimBase"]
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 104.0
+offset_bottom = 104.0
+color = Color(1, 0.88, 0.8, 0.35)
+mouse_filter = 1

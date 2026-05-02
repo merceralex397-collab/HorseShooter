@@ -9,10 +9,16 @@ import struct
 import math
 import os
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+SOUND_DIR = os.path.join(PROJECT_ROOT, "assets", "sounds")
 
 def create_directory():
     """Create sounds directory if it doesn't exist"""
-    os.makedirs("/home/rowan/horseshooter/HorseShooter/assets/sounds", exist_ok=True)
+    os.makedirs(SOUND_DIR, exist_ok=True)
+
+
+def resolve_sound_path(name: str) -> str:
+    return os.path.join(SOUND_DIR, name)
 
 
 def generate_wave(filename, samples, sample_rate=22050):
@@ -129,33 +135,73 @@ def generate_hit_sound():
     return samples
 
 
+def generate_music_loop():
+    """Generate a simple loopable comic rhythm bed for background music."""
+    sample_rate = 22050
+    duration = 11.0  # seconds
+    num_samples = int(sample_rate * duration)
+
+    samples = []
+    import random
+
+    random.seed(99)
+    kick_period = sample_rate // 2
+    melody = [
+        220,
+        293.66,
+        261.63,
+        329.63,
+        349.23,
+        293.66,
+        392.0,
+        349.23,
+    ]
+
+    for i in range(num_samples):
+        t = i / sample_rate
+        pulse = (1.0 if (i % sample_rate) < sample_rate * 0.05 else 0.0)
+        kick = (
+            math.sin(2 * math.pi * 60 * t) * math.exp(-((i % kick_period) / (sample_rate * 0.08)))
+            if i % kick_period < sample_rate * 0.08
+            else 0.0
+        )
+        note = melody[(i // int(sample_rate * 0.55)) % len(melody)]
+        wave_index = (i % sample_rate) / sample_rate
+        lead = math.sin(2 * math.pi * note * wave_index) * 0.22 if wave_index < 0.4 else 0.0
+        noise = random.uniform(-0.04, 0.04)
+        envelope = 0.35 + 0.65 * (1.0 - ((i % num_samples) / float(num_samples)))
+        value = (25000 * (kick * 0.6 + lead * 0.3 + noise) * envelope)
+        # Punch in a small hi-hat-like shimmer on off-beats.
+        if int(t * 4.0) % 2 == 0 and wave_index > 0.55:
+            value += random.uniform(-1800, 1800)
+        samples.append(value)
+
+    return samples
+
+
 def main():
     create_directory()
 
     # Generate all sound effects
     shoot_samples = generate_shoot_sound()
-    generate_wave(
-        "/home/rowan/horseshooter/HorseShooter/assets/sounds/shoot.wav", shoot_samples
-    )
+    generate_wave(resolve_sound_path("shoot.wav"), shoot_samples)
     print("Created shoot.wav")
 
     explosion_samples = generate_explosion_sound()
-    generate_wave(
-        "/home/rowan/horseshooter/HorseShooter/assets/sounds/explosion.wav",
-        explosion_samples,
-    )
+    generate_wave(resolve_sound_path("explosion.wav"), explosion_samples)
     print("Created explosion.wav")
 
     boing_samples = generate_boing_sound()
-    generate_wave(
-        "/home/rowan/horseshooter/HorseShooter/assets/sounds/boing.wav", boing_samples
-    )
+    generate_wave(resolve_sound_path("boing.wav"), boing_samples)
     print("Created boing.wav")
 
     hit_samples = generate_hit_sound()
-    generate_wave(
-        "/home/rowan/horseshooter/HorseShooter/assets/sounds/hit.wav", hit_samples
-    )
+    generate_wave(resolve_sound_path("hit.wav"), hit_samples)
+
+    # Friendly loop track for menu/round ambience.
+    music_samples = generate_music_loop()
+    generate_wave(resolve_sound_path("music_loop.wav"), music_samples)
+    print("Created music_loop.wav")
     print("Created hit.wav")
 
     print("\nAll sound effects created successfully!")

@@ -6,9 +6,15 @@ extends Node2D
 @export var spawn_interval: float = 2.0
 @export var max_horses: int = 15
 @export var spawn_margin: float = 50.0
+const GAME_MANAGER_PATH := "/root/GameManager"
 
 var spawn_timer: float = 0.0
 var horse_scene = preload("res://scenes/horse.tscn")
+
+
+func _get_game_manager() -> Node:
+	var gm := get_node_or_null(GAME_MANAGER_PATH)
+	return gm
 
 func _ready():
 	# Spawn initial horses
@@ -50,4 +56,6 @@ func spawn_horse():
 	add_child(horse)
 	
 	# Register spawn
-	GameManager.register_horse_spawned()
+	var gm := _get_game_manager()
+	if gm and gm.has_method("register_horse_spawned"):
+		gm.register_horse_spawned()
